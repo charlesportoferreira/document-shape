@@ -1,0 +1,90 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{pgf}
+\usepgfmodule{shapes}
+\usetikzlibrary{shapes}
+\begin{document}
+\makeatletter
+\pgfdeclareshape{document}{
+\inheritsavedanchors[from=rectangle] % this is nearly a rectangle
+\inheritanchorborder[from=rectangle]
+\inheritanchor[from=rectangle]{center}
+% \inheritanchor[from=rectangle]{north}
+\inheritanchor[from=rectangle]{south}
+\inheritanchor[from=rectangle]{west}
+\inheritanchor[from=rectangle]{east}
+
+ 
+\anchor{north}{%
+\southwest \pgf@ya=\pgf@y \pgf@xa=\pgf@x
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+\pgf@x=.5\pgf@xa \advance\pgf@x by .5\pgf@xb
+\pgf@y=\pgf@yb \advance\pgf@y by .5\pgf@yb%.5\pgf@ya
+}
+
+\anchor{weste}{%
+\southwest \pgf@ya=\pgf@y \pgf@xa=\pgf@x
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+\pgf@y=.5\pgf@ya \advance\pgf@y by 0.8\pgf@yb
+\pgf@x=\pgf@xa %\advance\pgf@y by .5\pgf@yb%.5\pgf@ya
+}
+
+\anchor{easte}{%
+\southwest \pgf@ya=\pgf@y \pgf@xa=\pgf@x
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+\pgf@y=.5\pgf@ya \advance\pgf@y by 0.8\pgf@yb
+\pgf@x=\pgf@xb %\advance\pgf@y by .5\pgf@yb%.5\pgf@ya
+}
+
+% ... and possibly more
+\backgroundpath{% this is new
+
+% store lower left in xa/ya and upper right in xb/yb
+\southwest \pgf@xa=\pgf@x \pgf@ya=\pgf@y
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y \advance\pgf@yb by .5\pgf@yb
+% compute corner of ‘‘flipped page’’
+\pgf@xc=\pgf@xb \advance\pgf@xc by-.7\pgf@xc % this should be a parameter
+\pgf@yc=\pgf@yb \advance\pgf@yc by-.5\pgf@yc
+% construct main path
+\pgfpathmoveto{\pgfpoint{\pgf@xa}{\pgf@ya}}
+\pgfpathlineto{\pgfpoint{\pgf@xa}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@yc}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@ya}}
+\pgfpathclose
+
+% add little corner
+\pgfpathmoveto{\pgfpoint{\pgf@xc}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yc}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@yc}}
+\pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yc}}
+}
+}\hskip-1.2cm
+\begin{tikzpicture}
+% \node[fill=gray!40!white,minimum width = 1cm,draw=black,shape=document,inner sep=2ex] (x) at (3,3) {};
+
+\node[fill=gray!40!white,draw=black,shape=rectangle,minimum width=1cm,minimum height=1cm] (x) at (1,2) {};
+\node[fill=yellow!80!black,draw,ellipse,double]at (1,1) (y) {ellipse};
+
+\node[shape=document,draw=blue,fill=red,minimum width=2cm,minimum height=1cm] (doc) at (-2,2){};
+% \node at (3,3) (a){b};
+% \draw (x.north) -- (y);
+% \draw (x.south) -- (y);
+% \draw (x.east) -- (y);
+% \draw (x.west) -- (y);
+% \draw (x) -- (y);
+% \draw (doc.east) -- (y); 
+% \draw (doc.west) -- (y); 
+% \draw (doc.north) -- (y); 
+% \draw (doc.south) -- (y); 
+% \draw[blue] (doc.weste) -- (y); b
+% \draw[red] (doc.easte) -- (y); b
+
+% \draw[green!50!black] (doc.weste) -- (doc.easte);
+
+\draw (x) -- (y);
+
+\end{tikzpicture}
+
+
+\end{document}
